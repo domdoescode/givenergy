@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -59,8 +58,6 @@ func GetInverterInfo(serialNumber string) (*GetInverterInfoResponse, error) {
 		return &response, err
 	}
 
-	log.Println(string(respByte))
-
 	err = json.Unmarshal(respByte, &response)
 	if err != nil {
 		return &response, err
@@ -114,8 +111,6 @@ func GetInverterRuntime(serialNumber string) (*GetInverterRuntimeResponse, error
 		return &response, err
 	}
 
-	log.Println(string(respByte))
-
 	err = json.Unmarshal(respByte, &response)
 	if err != nil {
 		return &response, err
@@ -158,8 +153,6 @@ func GetInverterEnergy(serialNumber string, outputType int, dateText string) (*G
 	if err != nil {
 		return &response, err
 	}
-
-	log.Println(string(respByte))
 
 	err = json.Unmarshal(respByte, &response)
 	if err != nil {
@@ -237,8 +230,6 @@ func GetInverterBatCell(serialNumber string) (*GetInverterBatCellResponse, error
 	if err != nil {
 		return &response, err
 	}
-
-	log.Println(string(respByte))
 
 	err = json.Unmarshal(respByte, &response)
 	if err != nil {

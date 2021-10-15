@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -174,8 +173,6 @@ func GetPlantSummary() (*GetPlantSummaryResponse, error) {
 		return &response, err
 	}
 
-	log.Println(string(respByte))
-
 	err = json.Unmarshal(respByte, &response)
 	if err != nil {
 		return &response, err
@@ -233,8 +230,6 @@ func GetPlantRuntime(plantID int) (*GetPlantRuntimeResponse, error) {
 	if err != nil {
 		return &response, err
 	}
-
-	log.Println(string(respByte))
 
 	err = json.Unmarshal(respByte, &response)
 	if err != nil {
@@ -299,8 +294,6 @@ func GetPlantDevices(plantID int) (*GetPlantDevicesResponse, error) {
 		return &response, err
 	}
 
-	log.Println(string(respByte))
-
 	err = json.Unmarshal(respByte, &response)
 	if err != nil {
 		return &response, err
@@ -343,8 +336,6 @@ func GetPlantEnergy(plantID, outputType int, dateText string) (*GetPlantEnergyRe
 	if err != nil {
 		return &response, err
 	}
-
-	log.Println(string(respByte))
 
 	err = json.Unmarshal(respByte, &response)
 	if err != nil {
@@ -405,8 +396,6 @@ func GetPlantEvents(plantID int) (*GetPlantEventsResponse, error) {
 	if err != nil {
 		return &response, err
 	}
-
-	log.Println(string(respByte))
 
 	err = json.Unmarshal(respByte, &response)
 	if err != nil {

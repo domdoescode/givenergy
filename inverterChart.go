@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"time"
 )
@@ -74,7 +73,65 @@ func GetInverterDayLine(serialNumber string, attribute InverterAttribute, dateTe
 		return &response, err
 	}
 
-	log.Println(string(respByte))
+	err = json.Unmarshal(respByte, &response)
+	if err != nil {
+		return &response, err
+	}
+
+	return &response, nil
+}
+
+type GetInverterDayMultiLineResponse struct {
+	IsOnPlant bool   `json:"isOnPlant"`
+	XAxis     string `json:"xAxis"`
+	Data      []struct {
+		BatPowerActual int     `json:"batPowerActual"`
+		LoadPower      int     `json:"loadPower"`
+		Year           int     `json:"year"`
+		PacImport      float64 `json:"pacImport"`
+		BatPower       float64 `json:"batPower"`
+		Minute         int     `json:"minute"`
+		Second         int     `json:"second"`
+		Pac            float64 `json:"pac"`
+		Month          int     `json:"month"`
+		Hour           int     `json:"hour"`
+		Ppv            float64 `json:"ppv"`
+		Time           string  `json:"time"`
+		Day            int     `json:"day"`
+		PacExport      float64 `json:"pacExport"`
+	} `json:"data"`
+	Success bool `json:"success"`
+}
+
+func GetInverterDayMultiLine(serialNumber string, dateText string) (*GetInverterDayMultiLineResponse, error) {
+	var response GetInverterDayMultiLineResponse
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+
+	defer cancel()
+
+	req, err := http.NewRequestWithContext(ctx, "POST", getURL("invChart/dayMultiLine"), nil)
+	if err != nil {
+		return &response, err
+	}
+
+	q := req.URL.Query()
+	q.Add("serialNum", serialNumber)
+	q.Add("forPlant", "true") // Seems to be set in the UI calls
+	q.Add("dateText", dateText)
+	req.URL.RawQuery = q.Encode()
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return &response, err
+	}
+
+	defer resp.Body.Close()
+
+	respByte, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return &response, err
+	}
 
 	err = json.Unmarshal(respByte, &response)
 	if err != nil {
@@ -126,8 +183,6 @@ func GetInverterMonthColumn(serialNumber string, year, month string) (*GetInvert
 		return &response, err
 	}
 
-	log.Println(string(respByte))
-
 	err = json.Unmarshal(respByte, &response)
 	if err != nil {
 		return &response, err
@@ -177,8 +232,6 @@ func GetInverterYearColumn(serialNumber string, year string) (*GetInverterYearCo
 		return &response, err
 	}
 
-	log.Println(string(respByte))
-
 	err = json.Unmarshal(respByte, &response)
 	if err != nil {
 		return &response, err
@@ -225,8 +278,6 @@ func GetInverterTotalColumn(serialNumber string) (*GetInverterTotalColumnRespons
 	if err != nil {
 		return &response, err
 	}
-
-	log.Println(string(respByte))
 
 	err = json.Unmarshal(respByte, &response)
 	if err != nil {

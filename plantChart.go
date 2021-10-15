@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -52,8 +51,6 @@ func GetPlantDayLine(plantID int, dateText string) (*GetPlantDayLineResponse, er
 	if err != nil {
 		return &response, err
 	}
-
-	log.Println(string(respByte))
 
 	err = json.Unmarshal(respByte, &response)
 	if err != nil {
@@ -109,8 +106,6 @@ func GetPlantMonthColumn(plantID int, year, month string) (*GetPlantMonthColumnR
 		return &response, err
 	}
 
-	log.Println(string(respByte))
-
 	err = json.Unmarshal(respByte, &response)
 	if err != nil {
 		return &response, err
@@ -163,8 +158,6 @@ func GetPlantYearColumn(plantID int, year string) (*GetPlantYearColumnResponse, 
 		return &response, err
 	}
 
-	log.Println(string(respByte))
-
 	err = json.Unmarshal(respByte, &response)
 	if err != nil {
 		return &response, err
@@ -215,8 +208,6 @@ func GetPlantTotalColumn(plantID int) (*GetPlantTotalColumnResponse, error) {
 	if err != nil {
 		return &response, err
 	}
-
-	log.Println(string(respByte))
 
 	err = json.Unmarshal(respByte, &response)
 	if err != nil {
